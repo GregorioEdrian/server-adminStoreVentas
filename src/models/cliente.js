@@ -15,7 +15,7 @@ module.exports = (sequelize) =>{
     },
     correo:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     direccion:{
       type: DataTypes.STRING,
@@ -27,9 +27,10 @@ module.exports = (sequelize) =>{
     },
     dni:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
-    delete:{
+    status:{
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false

@@ -18,7 +18,19 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    total_venta:{
+    total_venta_mlc_noIva:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    total_venta_usd_noIva:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    total_venta_mlc_conIva:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    total_venta_usd_conIva:{
       type: DataTypes.REAL,
       allowNull: false,
     },
@@ -26,19 +38,31 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    iva:{
+    total_Iva_Sale:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    import_igtf:{
       type: DataTypes.REAL,
       allowNull: false,
     },
     descuento:{
       type: DataTypes.REAL,
-      allowNull: false,
+      allowNull: true,
     },
-    subtotal:{
+    subtotal_mlc:{
       type: DataTypes.REAL,
       allowNull: false
     },
-    total:{
+    total_mlc:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    subtotal_usd:{
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    total_usd:{
       type: DataTypes.REAL,
       allowNull: false,
     },
@@ -58,6 +82,18 @@ module.exports = (sequelize) => {
       type: DataTypes.REAL,
       allowNull: false,
     },
+    tasa_ref_venta:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    vuelto_mlc:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
+    vuelto_usd:{
+      type: DataTypes.REAL,
+      allowNull: false,
+    },
     status:{
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -68,16 +104,6 @@ module.exports = (sequelize) => {
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'venta',
-    hooks: {
-      beforeCreate: (venta, options) => {
-        const sumaPagos = venta.pago_usd + venta.pago_mlc_efectivo + venta.pago_mlc_punto + venta.pago_mlc_digital;
-        
-        // Verificar si la suma de pagos es igual al total de la venta
-        if (sumaPagos < venta.total) {
-          throw new Error('La suma de los pagos no coincide con el total de la venta');
-        }
-      }      
-    }
+    tableName: 'venta'
   }
 )}

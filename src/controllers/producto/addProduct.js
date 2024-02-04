@@ -3,11 +3,28 @@ const { Op } = require('sequelize');
 
 async function addProducto(req, res){
   try {
-    const {newProduct, presentacion } = req.body;
-    var { codigo, nombre, descripcion, lote, p_com_bulto, unidad_p_bulto, p_venta_bulto, p_venta_unidad, iva, total_bulto, cantidad_unidad, img, observacion, categorias } = newProduct
 
+    const {newProduct, presentacion } = req.body;
+    var { codigo, 
+      nombre, 
+      descripcion, 
+      lote, 
+      p_com_bulto, 
+      unidad_p_bulto, 
+      p_venta_bulto, 
+      p_venta_unidad, 
+      iva, total_bulto, 
+      cantidad_unidad, 
+      img, observacion, 
+      categorias, 
+      p_venta_mayor, 
+      cant_min_mayoreo,
+      venta_por 
+    } = newProduct
+
+    const typesVentasPor = ['unit', 'divisible']
     
-    if(!codigo || !nombre || !descripcion || p_com_bulto < 0  || unidad_p_bulto < 0  || p_venta_bulto < 0  || p_venta_unidad < 0  || iva < 0 ||  total_bulto < 0 || cantidad_unidad < 0){
+    if(!codigo || !nombre || !descripcion || p_com_bulto < 0  || unidad_p_bulto < 0  || p_venta_bulto < 0  || p_venta_unidad < 0  || iva < 0 ||  total_bulto < 0 || cantidad_unidad < 0 || p_venta_mayor < 0, cant_min_mayoreo < 0 || !typesVentasPor.includes(venta_por) ){
       return res.status(404).json({error: 'Falta enviar datos obligatorios o los datos son erroneos'});
     }
 
@@ -15,10 +32,13 @@ async function addProducto(req, res){
     if(findPresentacion === null){
       return res.status(404).json({error: 'Datos de la presentación del producto incorrectos'});
     }
+
+    const totalVMayor = p_venta_mayor * (1 + parseFloat(iva/100))
+    const total_v_mayor = parseFloat(totalVMayor.toFixed(2));
     
     const producto = await Producto.create({
       codigo: codigo, nombre: nombre,
-      descripcion: descripcion, lote: lote, p_com_bulto: p_com_bulto, unidad_p_bulto: unidad_p_bulto, p_venta_bulto:p_venta_bulto, p_venta_unidad: p_venta_unidad, iva:iva, total_bulto: total_bulto, cantidad_unidad: cantidad_unidad, img:img, observacion:observacion, presentacion: presentacion.id});
+      descripcion: descripcion, lote: lote, p_com_bulto: p_com_bulto, unidad_p_bulto: unidad_p_bulto, p_venta_bulto:p_venta_bulto, p_venta_unidad: p_venta_unidad, iva:iva, total_bulto: total_bulto, cantidad_unidad: cantidad_unidad, img:img, observacion:observacion, presentacion: presentacion.id, p_venta_mayor: p_venta_mayor, cant_min_mayoreo: cant_min_mayoreo, total_v_mayor: total_v_mayor, venta_por: venta_por });
     
     categorias = await Categoria.findAll({
       where: {

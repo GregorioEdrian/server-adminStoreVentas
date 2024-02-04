@@ -13,21 +13,42 @@ module.exports = (sequelize) => {
       type: DataTypes.REAL,
       allowNull: false
     },
-    precioVentaDia:{
+    cant:{
       type: DataTypes.REAL,
       allowNull: false
     },
-    totalUsdCantidad:{
+    precioVentaDiaNoIva:{
       type: DataTypes.REAL,
       allowNull: false
     },
-    totalMlcCantidad:{
+    precioVentaDiaComIva:{
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    totalUsdCantidadNoIva:{
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    totalMlcCantidadNoIva:{
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    totalUsdCantidadConIva:{
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    totalMlcCantidadConIva:{
       type: DataTypes.REAL,
       allowNull: false
     },
     iva:{
       type: DataTypes.REAL,
       allowNull: false
+    },
+    delete:{
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   },
   {

@@ -41,6 +41,14 @@ module.exports = (sequelize) => {
       type: DataTypes.REAL,
       allowNull: false
     },
+    p_venta_mayor:{ 
+      type: DataTypes.REAL,
+      allowNull: false
+    },
+    cant_min_mayoreo:{ 
+      type: DataTypes.REAL,
+      allowNull: false
+    },
     iva: {
       type: DataTypes.REAL,
       allowNull: false
@@ -69,9 +77,17 @@ module.exports = (sequelize) => {
       type: DataTypes.REAL,
       allowNull: true
     },
+    total_v_mayor:{ 
+      type: DataTypes.REAL,
+      allowNull: false
+    },
     observacion:{
       type:DataTypes.STRING,
       allowNull: true
+    },
+    venta_por:{
+      type:DataTypes.ENUM('unit', 'divisible'),
+      allowNull: false,
     },
     delete:{
       type:DataTypes.BOOLEAN,
@@ -93,24 +109,13 @@ module.exports = (sequelize) => {
         producto.total_unidades = parseFloat(totalUnidad.toFixed(3));
         
         pTotalBulto = producto.p_venta_bulto * (1 + parseFloat(producto.iva/100))
-        producto.p_v_total_bulto = parseFloat(pTotalBulto.toFixed(3));
+        producto.p_v_total_bulto = parseFloat(pTotalBulto.toFixed(2));
 
         pTotalUnidad = producto.p_venta_unidad*(1 + parseFloat(producto.iva/100))
-        producto.p_v_total_unidad = parseFloat(pTotalUnidad.toFixed(3));
+        producto.p_v_total_unidad = parseFloat(pTotalUnidad.toFixed(2));
+
+        
       },
-      beforeUpdate:(producto, options) =>{
-        //total_unidades = ((total_bulto * unidad_p_bulto) + cantidad_unidad)
-        //p_v_total_bulto:{ //(p_venta_bulto * (1+ (iva / (100)))
-        //p_v_total_unidad:{ //(p_venta_unidad * (1 + (iva / (100)))
-        totalUnidad = producto.total_bulto*producto.unidad_p_bulto + producto.cantidad_unidad
-        producto.total_unidades = parseFloat(totalUnidad.toFixed(3));
-
-        pTotalBulto = producto.p_venta_bulto * (1 + parseFloat(producto.iva/100))
-        producto.p_v_total_bulto = parseFloat(pTotalBulto.toFixed(3));
-
-        pTotalUnidad = producto.p_venta_unidad*(1 + parseFloat(producto.iva/100))
-        producto.p_v_total_unidad = parseFloat(pTotalUnidad.toFixed(3));
-      }
     }
   }
   

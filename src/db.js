@@ -10,6 +10,10 @@ const {
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+  dialectOptions: {
+    useUTC: '+00:00', // for reading from database
+  },
+  timezone: '-04:00',
   define: {
     freezeTableName: true, // Evitar que Sequelize pluralice automáticamente el nombre de la tabla
   }
@@ -44,14 +48,14 @@ const { Categoria, Producto, Presentacion, Cliente, DetalleVenta, TazaDolar, Tip
 //Producto =>
 Producto.belongsTo(Presentacion, { as: 'ProductoPresentacion', foreignKey: 'presentacion', timestamps: false, createdAt: false, updatedAt: false});
 Producto.belongsToMany(Categoria, { through: 'ProductoCategoria', timestamps: false, createdAt: false, updatedAt: false});
-Producto.hasMany(DetalleVenta, { as: 'ProductoDetalleVenta', foreignKey: 'producto_detalleVenta', timestamps: false, createdAt: false, updatedAt: false});
+/* Producto.hasMany(DetalleVenta, { as: 'ProductoDetalleVenta', foreignKey: 'producto_detalleVenta', timestamps: false, createdAt: false, updatedAt: false}); */
 
 //CategoriaPresentacion
 Categoria.belongsToMany(Producto, { through: 'ProductoCategoria', timestamps: false, createdAt: false, updatedAt: false});
 Presentacion.hasMany(Producto, { as: 'ProductoPresentacion', foreignKey: 'presentacion', timestamps: false, createdAt: false, updatedAt: false});
 
 //Venta =>
-Venta.hasMany(DetalleVenta, { as: 'Venta_DetalleVenta', foreignKey: 'ventaDetalleVenta', timestamps: false, createdAt: false, updatedAt: false});
+Venta.hasMany(DetalleVenta, { as: 'detalleVenta', foreignKey: 'idDetalleVenta', timestamps: false, createdAt: false, updatedAt: false});
 Venta.belongsTo(Cliente, {as: 'venta_cliente', foreignKey:'ventaCliente', timestamps: false, createdAt: false, updatedAt: false})
 Venta.belongsTo(Usuario, {as: 'venta_usuario', foreignKey:'ventaUsuario', timestamps: false, createdAt: false, updatedAt: false})
 
@@ -62,9 +66,9 @@ Cliente.belongsTo(TipoDni, {as: 'cliente_tipoDni', foreignKey:'clienteTipoDni', 
 Usuario.belongsTo(TipoDni, {as: 'usuario_tipoDni', foreignKey:'usuarioTipoDni', timestamps: false, createdAt: false, updatedAt: false})
 
 //DetalleVenta
-DetalleVenta.belongsTo(Producto, {as: 'Producto_DetalleVenta', foreignKey:'detalleProducto', timestamps: false, createdAt: false, updatedAt: false})
-DetalleVenta.belongsTo(Venta, {as: 'DetalleVenta_Venta', foreignKey:'detalleVentaVenta', timestamps: false, createdAt: false, updatedAt: false})
-DetalleVenta.belongsTo(TazaDolar, {as: 'DetalleVenta_TazaDolar', foreignKey:'detalleVentaTazaDolar', timestamps: false, createdAt: false, updatedAt: false})
+DetalleVenta.belongsTo(Producto, { foreignKey:'productId', as: 'producto', timestamps: false, createdAt: false, updatedAt: false})
+DetalleVenta.belongsTo(Venta, {as: 'venta', foreignKey:'idVenta', timestamps: false, createdAt: false, updatedAt: false})
+DetalleVenta.belongsTo(TazaDolar, {as: 'tasaDolar', foreignKey:'idTasaDolar', timestamps: false, createdAt: false, updatedAt: false})
 
 
 

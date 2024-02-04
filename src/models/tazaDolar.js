@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       unique: true,      
       allowNull: false,
     },
-    taza:{
+    tasa:{
       type: DataTypes.REAL,
       allowNull: false
     },

@@ -32,6 +32,8 @@ const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 const { DB_fORCE } = process.env;
 const dbForce = DB_fORCE == '0' ? false : true;
+const defaultDniType = require('./src/controllers/dniType/defaultTipoDni.js');
+const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
 //const InitializateDataModels = require('./src/middleware/index.js');
 
 // Syncing all the models at once.
@@ -44,7 +46,11 @@ const dbForce = DB_fORCE == '0' ? false : true;
 }); */
 
 conn.sync({ force: dbForce }).then(() => {
-    server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+  defaultDniType().then(() => {
+    clientDefaultSeeder().then(()=>{
+      server.listen(3001, () => {
+      console.log('%s listening at 3001'); // eslint-disable-line no-console
+      });    
+    });    
   });  
 });
