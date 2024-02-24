@@ -16,7 +16,7 @@ async function getRateDollar(req, res){
     const dollarElement = $('#dolar > div > div > div.col-sm-6.col-xs-6.centrado > strong');
     const rateDollar = dollarElement.text();
     const textRateDollar = rateDollar.trim().replace(',', '.');
-    const numberRateDolar = parseFloat(textRateDollar).toFixed(2);
+    const numberRateDolar = parseFloat(textRateDollar);
 
     if(!numberRateDolar){
       return res.status(404).json({error: 'no se pudo obtener la tasa del dolar'});
@@ -35,7 +35,7 @@ async function getRateDollar(req, res){
     const anio = String(currentDate.getFullYear());
     //data
     const fecha = new Date(`${anio}-${mes}-${dia}T${hora}:${minutos}:${segundos}`);
-    const dataTasaDollar = {tasa: Number(numberRateDolar), fecha: fecha}
+    const dataTasaDollar = {tasa: Number(numberRateDolar.toFixed(2)), fecha: fecha}
     const dataMoreRecent = await TazaDolar.findOne({order: [['fecha', 'DESC']]});
 
     if(!dataMoreRecent){

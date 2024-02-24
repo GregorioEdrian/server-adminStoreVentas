@@ -33,8 +33,8 @@ async function addProducto(req, res){
       return res.status(404).json({error: 'Datos de la presentación del producto incorrectos'});
     }
 
-    const totalVMayor = p_venta_mayor * (1 + parseFloat(iva/100))
-    const total_v_mayor = parseFloat(totalVMayor.toFixed(2));
+    const totalVMayor = p_venta_mayor * parseFloat((1 + (iva/100)).toFixed(2))
+    const total_v_mayor = (totalVMayor);
     
     const producto = await Producto.create({
       codigo: codigo, nombre: nombre,

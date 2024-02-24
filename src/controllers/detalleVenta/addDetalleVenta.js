@@ -28,7 +28,7 @@ async function addDetalleVenta(idProdu, idVenta, idTasaDolar, numItems, cant, li
       throw error;
     }
     if(cant > producto.total_unidades){
-      if(listAgregados.length > 0){
+      /* if(listAgregados.length > 0){
         for(const element of listAgregados){
           const rest_total_unidades = cant + producto.total_unidades;
           const rest_nuevaCantBulto = Math.floor(rest_total_unidades / producto.unidad_p_bulto);
@@ -38,7 +38,7 @@ async function addDetalleVenta(idProdu, idVenta, idTasaDolar, numItems, cant, li
             cantidad_unidad: rest_nuevaCantidadUnid, total_unidades: rest_total_unidades 
           });
         }
-      }   
+      }  */  
       const error = new Error(`La cantidad de ${producto.nombre} a vender excede la cantidad disponible en inventario.`);
       throw error;
     }
@@ -46,15 +46,17 @@ async function addDetalleVenta(idProdu, idVenta, idTasaDolar, numItems, cant, li
     cant_min_mayoreo = producto.cant_min_mayoreo;
     if(cant >= cant_min_mayoreo){
       precioVentaDiaNoIva = producto.p_venta_mayor;
+      precioVentaDiaComIva = producto.total_v_mayor;
     }else{
       precioVentaDiaNoIva = producto.p_venta_unidad;
+      precioVentaDiaComIva = producto.p_v_total_unidad
     }
-    totalUsdCantidadNoIva = (precioVentaDiaNoIva / tasaDolar.tasa) * cant;
     totalMlcCantidadNoIva = precioVentaDiaNoIva * cant
-    const IVA_producto = producto.iva;
-    totalUsdCantidadConIva = totalUsdCantidadNoIva * (1 + IVA_producto/100);
-    totalMlcCantidadConIva = totalMlcCantidadNoIva * (1 + IVA_producto/100);
-    precioVentaDiaComIva = precioVentaDiaNoIva * (1 + IVA_producto/100);
+    totalMlcCantidadConIva = precioVentaDiaComIva * cant;
+
+    totalUsdCantidadNoIva = totalMlcCantidadNoIva / tasaDolar.tasa;    
+    totalUsdCantidadConIva = totalMlcCantidadConIva / tasaDolar.tasa;
+    /* precioVentaDiaComIva = precioVentaDiaNoIva * (1 + IVA_producto/100) */
 
     const detalleVenta = await DetalleVenta.create({
       cant: cant,

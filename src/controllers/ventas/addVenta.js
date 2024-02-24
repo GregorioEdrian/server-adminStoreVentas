@@ -1,5 +1,5 @@
 const addDetalleVenta = require('../detalleVenta/addDetalleVenta.js');
-const { Venta, Usuario, Cliente, DetalleVenta, TazaDolar } = require('../../db');
+const { Venta, Usuario, Cliente, DetalleVenta, TazaDolar, Producto } = require('../../db');
 const getDate = require('../../utils/getDate');
 require('dotenv').config();
 const restoreStock = require('../../utils/restoreStock.js');
@@ -51,7 +51,7 @@ async function postVenta(req, res){
      //obtaining  the dollar rate.
      const dataTasaDolar = await TazaDolar.findAll({
       attributes: ['id']
-    });
+      });
 
     let tasaDolar;
     let mayorIdTasaDolar;
@@ -72,14 +72,9 @@ async function postVenta(req, res){
     }
     
     //building the sales detail list.
-    for (const element of listDataProduct) {
-      try {          
-        const detalleVenta = await addDetalleVenta(element.id, null, idTasaDolar, element.numItems, element.cant, listDetalleVenta);
-        listDetalleVenta.push(detalleVenta);
-      } catch (error) {
-          console.error('Error al agregar detalle de venta:', error);
-          return res.status(400).json({ error });
-      }
+    for (const element of listDataProduct) {                
+      const detalleVenta = await addDetalleVenta(element.id, null, idTasaDolar, element.numItems, element.cant, listDetalleVenta);
+      listDetalleVenta.push(detalleVenta);
     }
     
     //sales totals calculations.        
@@ -122,7 +117,7 @@ async function postVenta(req, res){
     //compare total due with payment sent.
     const totalSent =  pago_usd * tasaDolar + pago_mlc_efectivo + pago_mlc_punto + pago_mlc_digital;
     
-    if(total_with_tax > totalSent){
+    if(parseFloat(total_with_tax.toFixed(2)) > parseFloat(totalSent.toFixed(2))){
       await restoreStock(listDetalleVenta)
       return res.status(404).json({error: 'El monto enviado a pagar es menor al monto requerido.'})
     }
@@ -152,23 +147,35 @@ async function postVenta(req, res){
       vuelto_usd : (totalSent - total_with_tax) / tasaDolar,
     }
 
-    console.log(aqui)
+    
     const createVenta = await Venta.create(dataVenta)
 
-    for (const element of listDetalleVenta) {
-      try {          
-        const updateDetalle = await DetalleVenta.findByPk(element.id);
-        await updateDetalle.update({ idVenta: createVenta.id });
-
-      } catch (error) {
-        return res.status(400).json({ error });
-      }
+    for (const element of listDetalleVenta) {               
+      const updateDetalle = await DetalleVenta.findByPk(element.id);
+      await updateDetalle.update({ idVenta: createVenta.id });
     }
-    return res.status(200).json({venta : createVenta});
+    const idVenta = createVenta.dataValues.id;
+    const resulVenta = await Venta.findByPk(idVenta, {
+      include: [
+        { model: Cliente, as: 'venta_cliente'},
+        { model: Usuario, as: 'venta_usuario', attributes: {exclude: [ 'password', 'level', 'delete' ]}  }   
+      ],
+      attributes: { exclude: ['ventaCliente', 'ventaUsuario', 'clienteVenta', 'usuarioVenta'] }
+    });
+    
+    const allDetalleVenta = await DetalleVenta.findAll({where: {  idVenta : idVenta },
+      include: [
+        { model: Producto, as: 'producto', 
+        attributes: [ 'id', 'nombre', 'descripcion' ] },   
+      ], 
+      attributes: { exclude: ['idDetalleVenta', 'productId', 'idVenta', 'idTasaDolar'] }
+    })
+
+    return res.status(200).json({venta : resulVenta, detalleVenta: allDetalleVenta});
 
   } catch (error) {
     await restoreStock(listDetalleVenta)
-    return res.status(400).json({ error : error})
+    return res.status(400).json({ error : error.message})
   }
 }
 

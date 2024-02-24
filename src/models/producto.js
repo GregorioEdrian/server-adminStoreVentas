@@ -106,15 +106,13 @@ module.exports = (sequelize) => {
         //p_v_total_bulto:{ //(p_venta_bulto * (1+ (iva / (100)))
         //p_v_total_unidad:{ //(p_venta_unidad * (1 + (iva / (100)))
         totalUnidad = producto.total_bulto*producto.unidad_p_bulto + producto.cantidad_unidad
-        producto.total_unidades = parseFloat(totalUnidad.toFixed(3));
+        producto.total_unidades = (totalUnidad);
         
-        pTotalBulto = producto.p_venta_bulto * (1 + parseFloat(producto.iva/100))
-        producto.p_v_total_bulto = parseFloat(pTotalBulto.toFixed(2));
+        pTotalBulto = parseFloat((producto.p_venta_bulto * parseFloat((1 + (producto.iva/100)).toFixed(2))).toFixed(2))
+        producto.p_v_total_bulto = pTotalBulto;
 
-        pTotalUnidad = producto.p_venta_unidad*(1 + parseFloat(producto.iva/100))
-        producto.p_v_total_unidad = parseFloat(pTotalUnidad.toFixed(2));
-
-        
+        pTotalUnidad = (producto.p_venta_unidad * parseFloat((1 + producto.iva/100).toFixed(2))).toFixed(2)
+        producto.p_v_total_unidad = parseFloat(pTotalUnidad);        
       },
     }
   }

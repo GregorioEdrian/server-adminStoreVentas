@@ -27,16 +27,16 @@ async function updateProduct(req, res){
     }
 
     const totalUnidad = total_bulto * unidad_p_bulto + cantidad_unidad;
-    const total_unidades = parseFloat(totalUnidad.toFixed(3));
+    const total_unidades = (totalUnidad);
 
-    const pTotalBulto = p_venta_bulto * (1 + parseFloat(iva/100));
-    const p_v_total_bulto = parseFloat(pTotalBulto.toFixed(2));
+    const pTotalBulto = p_venta_bulto * (1 + (iva/100));
+    const p_v_total_bulto = (pTotalBulto);
 
-    const pTotalUnidad = p_venta_unidad*(1 + parseFloat(iva/100));
-    const p_v_total_unidad = parseFloat(pTotalUnidad.toFixed(2));
+    const pTotalUnidad = p_venta_unidad*(1 + (iva/100));
+    const p_v_total_unidad = (pTotalUnidad);
 
-    const totalVMayor = p_venta_mayor * (1 + parseFloat(producto.iva/100))
-    const total_v_mayor = parseFloat(totalVMayor.toFixed(2));
+    const totalVMayor = p_venta_mayor * (1 + (producto.iva/100))
+    const total_v_mayor = (totalVMayor);
 
     const dataProducto = {
       codigo: codigo, nombre: nombre,
