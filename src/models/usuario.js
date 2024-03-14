@@ -35,7 +35,8 @@ module.exports = (sequelize) =>{
     },
     level:{
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 'user'
     },
     delete:{
       type: DataTypes.BOOLEAN,

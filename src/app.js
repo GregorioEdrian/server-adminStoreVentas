@@ -4,14 +4,20 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 
+const { authenticate } = require('./auth/athenticate');
+
 //Require All Routes.
 const productRouter = require('./routes/productosRouter.js')
 const categoriasRouter = require('./routes/categoriasRouter.js');
 const presentacionRouter = require('./routes/presentacionRouter.js');
 const clientRouter = require('./routes/clientRouter.js');
 const usuarioRouter = require('./routes/usuarioRouter.js');
-const dniTipoRouter = require('./routes/dniTipoRouter.js')
-const ventasRouter = require('./routes/ventasRouter.js')
+const dniTipoRouter = require('./routes/dniTipoRouter.js');
+const ventasRouter = require('./routes/ventasRouter.js');
+const routerLoginRegister = require('./routes/routerLoginRegister.js');
+const tokenRouter = require('./routes/routerToken.js');
+const routerDataUser = require('./routes/routerProtecteDateUser')
+
 
 require('./db.js');
 
@@ -33,6 +39,8 @@ server.use((req, res, next) => {
 server.use(cors());
 
 //server.use('/', routes);
+server.use('/data-user', authenticate, routerDataUser);
+
 server.use('/categorias', categoriasRouter);
 server.use('/productos', productRouter);
 server.use('/presentacion', presentacionRouter);
@@ -40,6 +48,9 @@ server.use('/tipoDni', dniTipoRouter);
 server.use('/cliente', clientRouter);
 server.use('/venta', ventasRouter);
 server.use('/usuario', usuarioRouter);
+server.use('/sign-in-out', routerLoginRegister);
+server.use('/token', tokenRouter);
+
 // Error catching endware.
 server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   const status = err.status || 500;
