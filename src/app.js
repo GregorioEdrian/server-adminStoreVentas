@@ -42,11 +42,11 @@ server.use(cors());
 server.use('/data-user', authenticate, routerDataUser);
 
 server.use('/categorias', categoriasRouter);
-server.use('/productos', productRouter);
+server.use('/productos', authenticate ,productRouter);
 server.use('/presentacion', presentacionRouter);
 server.use('/tipoDni', dniTipoRouter);
 server.use('/cliente', clientRouter);
-server.use('/venta', ventasRouter);
+server.use('/venta', authenticate, ventasRouter);
 server.use('/usuario', usuarioRouter);
 server.use('/sign-in-out', routerLoginRegister);
 server.use('/token', tokenRouter);

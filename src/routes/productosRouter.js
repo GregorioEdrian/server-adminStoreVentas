@@ -4,11 +4,13 @@ const  addProducto  = require('../controllers/producto/addProduct.js');
 const getAllProductos = require('../controllers/producto/getAllProductos.js');
 const updateProduct = require('../controllers/producto/upDateProduct.js');
 const getSeaechProduct = require('../controllers/producto/getSeaechProduct.js');
+const addSubProduct = require('../controllers/producto/addSubStock.js')
 
 const productRouter = express.Router();
 // TODAS LAS REQ QUE LLEGUEN A ESTE ARCHIVO TIENEN EL "/producto" IMPLICITO
 
 //para llegar a la ruta 3001/producto/"lo que se necesita";
+productRouter.put('/addSubProduct', addSubProduct)
 productRouter.post('/', addProducto);
 productRouter.get('/codigo-nombre-ptv/wordSearch/:wordSearch', getSeaechProduct);
 productRouter.get('/', getAllProductos);

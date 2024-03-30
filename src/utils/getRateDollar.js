@@ -40,6 +40,7 @@ async function getRateDollar(req, res){
 
     if(!dataMoreRecent){
       const newTasaDolar = await TazaDolar.create(dataTasaDollar); 
+      res.setHeader('Cache-Control', 'no-store');
       return res.status(200).json(newTasaDolar);     
     }else{
       const fechaDataRate = new Date(dataMoreRecent.dataValues.fecha);
@@ -56,20 +57,24 @@ async function getRateDollar(req, res){
         const horaReferencia = new Date(fechaDataRate);
         horaReferencia.setHours(12, 0, 0, 0);
         if (fechaDataRate.getHours() < horaReferencia.getHours() && fecha.getHours() < horaReferencia.getHours()) {
+          res.setHeader('Cache-Control', 'no-store');
           return res.status(200).json(dataMoreRecent);
         } else if (fechaDataRate.getHours() > horaReferencia.getHours() && fecha.getHours() > horaReferencia.getHours()) {
           return res.status(200).json(dataMoreRecent);
         }else if (fechaDataRate.getHours() < horaReferencia.getHours() && fecha.getHours() > horaReferencia.getHours()) {
           const newTasaDolar = await TazaDolar.create(dataTasaDollar);
+          res.setHeader('Cache-Control', 'no-store');
           return res.status(200).json(newTasaDolar);
         } 
       } else if (anio1 > anio2 || (anio1 === anio2 && mes1 > mes2) || (anio1 === anio2 && mes1 === mes2 && dia1 > dia2)) {
         return res.status(400).json({error: 'La fecha de la petición es inferior a ultima fecha registrada'});
       } else {
         const newTasaDolar = await TazaDolar.create(dataTasaDollar);
+        res.setHeader('Cache-Control', 'no-store');
         return res.status(200).json(newTasaDolar);
       }
-    }  
+    }
+    res.setHeader('Cache-Control', 'no-store');  
     return res.status(200).json(dataMoreRecent);
 
   } catch (error) {

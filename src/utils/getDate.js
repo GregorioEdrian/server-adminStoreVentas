@@ -3,19 +3,19 @@ const axios = require('axios');
 async function getDate(){
   try {
    
-    const { data } = await axios.get('https://worldtimeapi.org/api/timezone/America/Caracas');
+    //const { data } = await axios.get('https://worldtimeapi.org/api/timezone/America/Caracas'); data.utc_datetime
     /* const data = await response.json(); */
-    const currentDate = new Date(data.utc_datetime);
-    //obtener la hora
-    const hora = String(currentDate.getHours()).padStart(2, '0');
-    const minutos = String(currentDate.getMinutes()).padStart(2, '0');
-    const segundos = String(currentDate.getSeconds()).padStart(2, '0');
+    const currentDate = new Date();
+    //obtener la hora UTC
+    const hora = String(currentDate.getUTCHours()).padStart(2, '0');
+    const minutos = String(currentDate.getUTCMinutes()).padStart(2, '0');
+    const segundos = String(currentDate.getUTCSeconds()).padStart(2, '0');
     //obtener la fecha
-    const dia = String(currentDate.getDate()).padStart(2, '0');
-    const mes = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const anio = String(currentDate.getFullYear());
+    const dia = String(currentDate.getUTCDate()).padStart(2, '0');
+    const mes = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
+    const anio = String(currentDate.getUTCFullYear());
     //data
-    const fecha = new Date(`${anio}-${mes}-${dia}T${hora}:${minutos}:${segundos}`);
+    const fecha = new Date(`${anio}-${mes}-${dia}T${hora}:${minutos}:${segundos}+0000`);
       
     return fecha;
   } catch (error) {

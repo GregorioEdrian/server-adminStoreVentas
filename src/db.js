@@ -12,8 +12,12 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
   dialectOptions: {
     useUTC: '+00:00', // for reading from database
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   },
-  timezone: '-04:00',
+  timezone: '+00:00',
   define: {
     freezeTableName: true, // Evitar que Sequelize pluralice automáticamente el nombre de la tabla
   }
