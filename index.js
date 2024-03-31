@@ -48,8 +48,8 @@ const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
 conn.sync({ force: dbForce }).then(() => {
   defaultDniType().then(() => {
     clientDefaultSeeder().then(()=>{
-      server.listen(3001, () => {
-      console.log('%s listening at 3001'); // eslint-disable-line no-console
+      server.listen(3000, "0.0.0.0", () => {
+      console.log('%s listening at 3000'); // eslint-disable-line no-console
       });    
     });    
   });  
