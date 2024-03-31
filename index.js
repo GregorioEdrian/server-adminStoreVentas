@@ -45,10 +45,12 @@ const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
   });  
 }); */
 
+const port = process.env.PORT || 4000
+
 conn.sync({ force: dbForce }).then(() => {
   defaultDniType().then(() => {
     clientDefaultSeeder().then(()=>{
-      server.listen(3000, "0.0.0.0", () => {
+      server.listen(port, "0.0.0.0", () => {
       console.log('%s listening at 3000'); // eslint-disable-line no-console
       });    
     });    
