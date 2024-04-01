@@ -3,6 +3,7 @@ const { Op } = require('sequelize');
 
 async function updateProduct(req, res){
   try {
+    const user = req.user;
     var {id, codigo, nombre, descripcion, lote, p_com_bulto, unidad_p_bulto, p_venta_bulto, p_venta_unidad, iva, total_bulto, cantidad_unidad, img, observacion, categorias, presentacion, p_venta_mayor, cant_min_mayoreo } = req.body;
     
     if(!codigo || !nombre || !descripcion || p_com_bulto < 0  || unidad_p_bulto < 0  || p_venta_bulto < 0  || p_venta_unidad < 0  || iva < 0 ||  total_bulto < 0 || cantidad_unidad < 0 || !categorias || presentacion < 0, p_venta_mayor < 0, cant_min_mayoreo < 0)
@@ -25,6 +26,13 @@ async function updateProduct(req, res){
     if(!producto){
       return res.status(404).json({error: 'Producto id no existe'});
     }
+    if(user.level !== 'root'){
+      if(producto.total_bulto > total_bulto || producto.cantidad_unidad > cantidad_unidad){
+        return res.status(404).json({error: 'Usuario no tiene atributos para disminuir cantidad de productos'});
+      }
+    }
+
+
 
     const totalUnidad = total_bulto * unidad_p_bulto + cantidad_unidad;
     const total_unidades = (totalUnidad);

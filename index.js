@@ -30,7 +30,7 @@ app.listen(PORT_LISTEN, ()=>{
 }); */
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
-const { DB_fORCE } = process.env;
+const { DB_fORCE, DB_HOST } = process.env;
 const dbForce = DB_fORCE == '0' ? false : true;
 const defaultDniType = require('./src/controllers/dniType/defaultTipoDni.js');
 const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
@@ -46,12 +46,14 @@ const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
 }); */
 
 const port = process.env.PORT || 4000
+const portLocalhost = 3001
+const getPort = DB_HOST === 'localhost' ? portLocalhost : port
 
 conn.sync({ force: dbForce }).then(() => {
   defaultDniType().then(() => {
     clientDefaultSeeder().then(()=>{
-      server.listen(port, "0.0.0.0", () => {
-      console.log('%s listening at 3000'); // eslint-disable-line no-console
+      server.listen(getPort, "0.0.0.0", () => {
+      console.log(`%s listening at ${getPort}`); // eslint-disable-line no-console
       });    
     });    
   });  

@@ -7,15 +7,25 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE
 } = process.env;
 
+const dialectOptionsLocalHost = {
+  useUTC: '+00:00', // for reading from database
+}
+
+const dialectOptionsAWS = {
+  useUTC: '+00:00', // for reading from database
+  ssl: {
+    require: true,
+    rejectUnauthorized: false
+  }
+}
+
+const sslDB = DB_HOST === 'localhost' ? dialectOptionsLocalHost : dialectOptionsAWS
+
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
   dialectOptions: {
-    useUTC: '+00:00', // for reading from database
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
+    ...sslDB
   },
   timezone: '+00:00',
   define: {
