@@ -50,6 +50,7 @@ async function getCutClose(req, res){
           infoCuotClose.vuelto_usd = infoCuotClose.vuelto_usd + element.vuelto_usd;
           infoCuotClose.total_venta_mlc = infoCuotClose.total_venta_mlc + element.total_venta_mlc_conIva
           infoCuotClose.total_venta_usd = infoCuotClose.total_venta_usd + element.total_venta_usd_conIva
+          infoCuotClose.pago_mlc_digital = infoCuotClose.pago_mlc_digital + element.pago_mlc_digital
         }
         
         res.setHeader('Cache-Control', 'no-store');
