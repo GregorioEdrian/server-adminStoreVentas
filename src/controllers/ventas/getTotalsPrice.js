@@ -44,7 +44,7 @@ async function getTotalsPrice(req, res){
         const cantSell = elem.cantSell;
         const numItems = elem.numItems
         
-        if(cantSell >= valueProduct.cant_min_mayoreo){
+        if(cantSell >= valueProduct.cant_min_mayoreo && valueProduct.cant_min_mayoreo > 0){
           const subCostVenta = valueProduct.p_venta_mayor * cantSell;
           const totalCostVenta = valueProduct.total_v_mayor * cantSell;
           subTotal = subTotal + subCostVenta;

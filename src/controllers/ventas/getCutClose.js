@@ -6,7 +6,7 @@ const getDate = require('../../utils/getDate');
 async function getCutClose(req, res){
   const listDetalleVenta = [];
   try {
-    const {initDay, endDay} = req.params;
+    const {initDay, endDay, departamento} = req.params;
     const user = req.user;
     
     const infoCuotClose = {
@@ -20,7 +20,11 @@ async function getCutClose(req, res){
       vuelto_usd: 0,
     }
 
-    if(!initDay && !endDay){
+    if(typeof departamento !== 'number' && departamento <= 0){
+      return res.status(200).json({error: 'Departamento para el cierre incorrecto'});
+    }
+
+    if(!initDay || !endDay){
       return res.status(200).json({error: 'indique un rango de fecha correcto'});
     }else{
       
@@ -32,7 +36,8 @@ async function getCutClose(req, res){
           fecha_venta: {
             [Op.between]: [ init_day, end_day]
           },
-          ventaUsuario: user.id
+          ventaUsuario: user.id,
+          ventaDepartamento: departamento
         }
       });
       const lisData = []

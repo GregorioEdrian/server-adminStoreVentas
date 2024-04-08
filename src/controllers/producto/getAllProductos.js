@@ -1,15 +1,19 @@
-const { Producto, Categoria, Presentacion } = require('../../db');
+const { Producto, Categoria, Presentacion, Departamento } = require('../../db');
 
 async function getAllProductos(req, res){
   try {
     const productos = await Producto.findAll({
       attributes: { 
-        exclude: ['presentacion'] 
+        exclude: ['presentacion', 'departamento'] 
       },
       include:[
         {
           model: Presentacion,
           as: "ProductoPresentacion"
+        },
+        {
+          model: Departamento,
+          as: "ProductoDepartamento"
         },
         {
           model: Categoria, 

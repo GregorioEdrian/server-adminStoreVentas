@@ -1,4 +1,4 @@
-const { Producto, Presentacion, Categoria } = require('../../db');
+const { Producto, Presentacion, Categoria, Departamento } = require('../../db');
 
 async function addSubProduct(req, res){
   try {
@@ -60,12 +60,16 @@ async function addSubProduct(req, res){
       if(updateProduct[0] === 1){
         const productoUpdate = await Producto.findByPk(idProduct, {
           attributes: { 
-            exclude: ['presentacion'] 
+            exclude: ['presentacion', 'departamento'] 
           },
           include: [
             {
               model: Presentacion,
               as: "ProductoPresentacion"
+            },
+            {
+              model: Departamento,
+              as: "ProductoDepartamento"
             },
             {model: Categoria, through: {attributes: []}}
           ],
@@ -98,12 +102,16 @@ async function addSubProduct(req, res){
       if(updateProduct[0] === 1){
         const productoUpdate = await Producto.findByPk(idProduct, {
           attributes: { 
-            exclude: ['presentacion'] 
+            exclude: ['presentacion', 'departamento'] 
           },
           include: [
             {
               model: Presentacion,
               as: "ProductoPresentacion"
+            },
+            {
+              model: Departamento,
+              as: "ProductoDepartamento"
             },
             {model: Categoria, through: {attributes: []}}
           ],

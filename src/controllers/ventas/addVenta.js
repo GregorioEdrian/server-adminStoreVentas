@@ -1,5 +1,5 @@
 const addDetalleVenta = require('../detalleVenta/addDetalleVenta.js');
-const { Venta, Usuario, Cliente, DetalleVenta, TazaDolar, Producto } = require('../../db');
+const { Venta, Usuario, Cliente, DetalleVenta, TazaDolar, Producto, Departamento } = require('../../db');
 const getDate = require('../../utils/getDate');
 require('dotenv').config();
 const restoreStock = require('../../utils/restoreStock.js');
@@ -12,10 +12,11 @@ async function postVenta(req, res){
   const listDetalleVenta = [];
   try {
     const {listDataProduct, idUser, idClient, idTasaDolar, 
-      pago_usd, pago_mlc_efectivo, pago_mlc_punto, pago_mlc_digital} = req.body;
+      pago_usd, pago_mlc_efectivo, pago_mlc_punto, pago_mlc_digital, idDepartamento} = req.body;
 
     if(!listDataProduct || !idUser || !idClient || !idTasaDolar || typeof pago_usd !== 'number' 
-      || typeof pago_mlc_efectivo !== 'number'  || typeof pago_mlc_punto !== 'number'  || typeof pago_mlc_digital  !== 'number' ){
+      || typeof pago_mlc_efectivo !== 'number'  || typeof pago_mlc_punto !== 'number'  
+      || typeof pago_mlc_digital  !== 'number' || typeof idDepartamento !== 'number'){
       return res.status(400).json({error: 'Faltan datos para registrar la venta'});
     }
     if(pago_usd < 0 || pago_mlc_efectivo < 0 || pago_mlc_punto < 0 || pago_mlc_digital < 0){
@@ -23,12 +24,15 @@ async function postVenta(req, res){
     }
     const userData = await Usuario.findByPk(idUser);
     const clientData = await Cliente.findByPk(idClient);
-    
+    const departamento = await Departamento.findByPk(idDepartamento);
     if(!userData){
       return res.status(400).json({error: 'El usuario enviado no existe'});
     }
     if(!clientData){
       return res.status(400).json({error: 'El cliente enviado no existe'});
+    }
+    if(!departamento){
+      return res.status(400).json({error: 'El departamento enviado no existe'});
     }
 
     const tasaRef = await TazaDolar.findByPk(idTasaDolar);
@@ -49,9 +53,9 @@ async function postVenta(req, res){
     
 
      //obtaining  the dollar rate.
-     const dataTasaDolar = await TazaDolar.findAll({
+    const dataTasaDolar = await TazaDolar.findAll({
       attributes: ['id']
-      });
+    });
 
     let tasaDolar;
     let mayorIdTasaDolar;
@@ -143,6 +147,7 @@ async function postVenta(req, res){
       tasa_ref_venta: tasaDolar,
       ventaCliente: idClient,
       ventaUsuario: idUser,
+      ventaDepartamento: idDepartamento,
       vuelto_mlc: totalSent - total_with_tax,
       vuelto_usd : (totalSent - total_with_tax) / tasaDolar,
     }

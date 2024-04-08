@@ -17,7 +17,7 @@ const ventasRouter = require('./routes/ventasRouter.js');
 const routerLoginRegister = require('./routes/routerLoginRegister.js');
 const tokenRouter = require('./routes/routerToken.js');
 const routerDataUser = require('./routes/routerProtecteDateUser')
-
+const routerDepartamento = require('./routes/routerDepartamento.js')
 
 require('./db.js');
 
@@ -44,6 +44,7 @@ server.use('/data-user', authenticate, routerDataUser);
 server.use('/categorias', categoriasRouter);
 server.use('/productos', authenticate ,productRouter);
 server.use('/presentacion', presentacionRouter);
+server.use('/departamento', routerDepartamento);
 server.use('/tipoDni', dniTipoRouter);
 server.use('/cliente', clientRouter);
 server.use('/venta', authenticate, ventasRouter);

@@ -54,28 +54,32 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Categoria, Producto, Presentacion, Cliente, DetalleVenta, TazaDolar, TipoDni, Usuario, Venta } = sequelize.models;
+const { Categoria, Producto, Presentacion, Cliente, DetalleVenta, TazaDolar, TipoDni, Usuario, Venta, Departamento } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 //Esto añade funciones como, Videogame.addGenres, VideoGame.getGenres... etc...
 //Producto =>
 Producto.belongsTo(Presentacion, { as: 'ProductoPresentacion', foreignKey: 'presentacion', timestamps: false, createdAt: false, updatedAt: false});
+Producto.belongsTo(Departamento, { as: 'ProductoDepartamento', foreignKey: 'departamento', timestamps: false, createdAt: false, updatedAt: false});
 Producto.belongsToMany(Categoria, { through: 'ProductoCategoria', timestamps: false, createdAt: false, updatedAt: false});
 /* Producto.hasMany(DetalleVenta, { as: 'ProductoDetalleVenta', foreignKey: 'producto_detalleVenta', timestamps: false, createdAt: false, updatedAt: false}); */
 
 //CategoriaPresentacion
 Categoria.belongsToMany(Producto, { through: 'ProductoCategoria', timestamps: false, createdAt: false, updatedAt: false});
 Presentacion.hasMany(Producto, { as: 'ProductoPresentacion', foreignKey: 'presentacion', timestamps: false, createdAt: false, updatedAt: false});
+Departamento.hasMany(Producto, { as: 'ProductoDepartamento', foreignKey: 'departamento', timestamps: false, createdAt: false, updatedAt: false});
 
 //Venta =>
 Venta.hasMany(DetalleVenta, { as: 'detalleVenta', foreignKey: 'idDetalleVenta', timestamps: false, createdAt: false, updatedAt: false});
 Venta.belongsTo(Cliente, {as: 'venta_cliente', foreignKey:'ventaCliente', timestamps: false, createdAt: false, updatedAt: false})
 Venta.belongsTo(Usuario, {as: 'venta_usuario', foreignKey:'ventaUsuario', timestamps: false, createdAt: false, updatedAt: false})
+Venta.belongsTo(Departamento, { as: 'venta_departamento', foreignKey: 'ventaDepartamento', timestamps: false, createdAt: false, updatedAt: false});
 
 //Usuario, Cliente =>
 Cliente.hasMany(Venta, { as: 'Cliente_Venta', foreignKey: 'clienteVenta', timestamps: false, createdAt: false, updatedAt: false});
 Usuario.hasMany(Venta, { as: 'usuario_venta', foreignKey: 'usuarioVenta', timestamps: false, createdAt: false, updatedAt: false});
+Departamento.hasMany(Venta, { as: 'departamento_venta', foreignKey: 'ventaDepartamento', timestamps: false, createdAt: false, updatedAt: false});
 Cliente.belongsTo(TipoDni, {as: 'cliente_tipoDni', foreignKey:'clienteTipoDni', timestamps: false, createdAt: false, updatedAt: false})
 Usuario.belongsTo(TipoDni, {as: 'usuario_tipoDni', foreignKey:'usuarioTipoDni', timestamps: false, createdAt: false, updatedAt: false})
 

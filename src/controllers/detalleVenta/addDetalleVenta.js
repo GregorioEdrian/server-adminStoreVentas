@@ -3,7 +3,8 @@ const { DetalleVenta, Producto, TazaDolar } = require('../../db');
 async function addDetalleVenta(idProdu, idVenta, idTasaDolar, numItems, cant, listAgregados){
   try {
     
-    if(!idProdu || !idVenta || !idTasaDolar || typeof numItems !== 'number' || numItems <= 0, typeof cant !== 'number' || cant <= 0){
+    if(!idProdu || !idVenta || !idTasaDolar || typeof numItems !== 'number' || numItems <= 0, 
+      typeof cant !== 'number' || cant <= 0){
       const error = new Error('Faltan datos para el rejistro del detalle de venta.');
       throw error;
     }
@@ -44,7 +45,8 @@ async function addDetalleVenta(idProdu, idVenta, idTasaDolar, numItems, cant, li
     }
     
     cant_min_mayoreo = producto.cant_min_mayoreo;
-    if(cant >= cant_min_mayoreo){
+
+    if(cant >= cant_min_mayoreo && cant_min_mayoreo > 0){
       precioVentaDiaNoIva = producto.p_venta_mayor;
       precioVentaDiaComIva = producto.total_v_mayor;
     }else{

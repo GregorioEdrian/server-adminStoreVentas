@@ -1,4 +1,4 @@
-const { Producto, Categoria, Presentacion } = require('../../db');
+const { Producto, Categoria, Presentacion, Departamento } = require('../../db');
 const { Op } = require('sequelize');
 
 async function getSeaechProduct(req, res){
@@ -27,12 +27,16 @@ async function getSeaechProduct(req, res){
         ]
       },
       attributes: {
-        exclude: ['presentacion', 'lote', 'p_com_bulto', 'p_venta_bulto', 'p_venta_unidad'],
+        exclude: ['presentacion', 'lote', 'p_com_bulto', 'p_venta_bulto', 'p_venta_unidad', 'departamento'],
       },
       include:[
         {
           model: Presentacion,
           as: "ProductoPresentacion"
+        },
+        {
+          model: Departamento,
+          as: "ProductoDepartamento"
         },
         {
           model: Categoria, 

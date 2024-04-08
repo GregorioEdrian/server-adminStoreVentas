@@ -9,7 +9,7 @@ const ventasRouter = Router();
 ventasRouter.get('/get-rate-dollar', getRateDollar);
 ventasRouter.post('/new-venta', postVenta);
 ventasRouter.post('/get-totals', getTotalsPrice);
-ventasRouter.get('/cut-close/initDay/:initDay/endDay/:endDay', getCutClose);
+ventasRouter.get('/cut-close/initDay/:initDay/endDay/:endDay/departamento/:departamento', getCutClose);
 ventasRouter.get('/', getNumVenta);
 
 module.exports = ventasRouter;
