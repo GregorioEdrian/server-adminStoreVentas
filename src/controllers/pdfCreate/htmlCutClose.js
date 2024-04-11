@@ -57,7 +57,7 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose) => {
 
   return ` 
   <!DOCTYPE html>
-  <html lang="en">
+  <html lang="es">
 
   <head>
     <meta charset="UTF-8" />
@@ -69,7 +69,7 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose) => {
   <body>   
     <h5>Corte de ventas en el rango de fechas (${getDateMoment(initDay)} al ${getDateMoment(endDay)})</h5>  
     <p>Reporte correspondiente a ${departamento.toUpperCase()}</p>
-    <div style="display: flex; justify-content: center; min-width: 808px;">
+    <div style="display: flex; justify-content: center; flex-direction: column ;min-width: 750px;">
       <table style="border: 1px #000000 solid; border-collapse: collapse; min-width: 733px; ">
         <thead>
           <tr style="background: #dcdcdc; font-size: 10px;">
