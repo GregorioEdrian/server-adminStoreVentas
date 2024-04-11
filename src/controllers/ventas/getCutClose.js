@@ -107,11 +107,20 @@ async function getCutClose(req, res){
           const arrVentaDetalle = listDetalleVenta.filter((detalle) => detalle.idVenta === venta.id);
           DataVentasDetalles.push(arrVentaDetalle)
         }
+        
         const htmlAllData = htmlCutClose(DataVentasDetalles, initDay, endDay, depart.nombre, infoCuotClose)
         const bs64Pdf = await generatePdfCutClose(htmlAllData);
                 
         res.setHeader('Cache-Control', 'no-store');
-        return res.status(200).json({data : infoCuotClose, bs64pdf: bs64Pdf})
+        return res.status(200).json({
+          data : infoCuotClose,
+          bs64Pdf: bs64Pdf
+         })
+
+         /* DataVentasDetalles: DataVentasDetalles,
+          initDay:initDay,
+          endDay: endDay, 
+          departamento: depart.nombre */
 
       }else{
         res.setHeader('Cache-Control', 'no-store');

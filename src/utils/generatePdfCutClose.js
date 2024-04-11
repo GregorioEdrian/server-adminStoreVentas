@@ -14,7 +14,10 @@ const generatePdfCutClose = async (html) => {
     const browser = await puppeteer.launch({
       args: [
         "--disable-web-security",
+        '--no-sandbox', 
+        '--disable-setuid-sandbox'
       ],
+      ignoreDefaultArgs: ['--disable-extensions'],
       defaultViewport: {
         width: 750,
         height: 500,
