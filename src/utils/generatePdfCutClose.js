@@ -2,20 +2,22 @@ const puppeteer = require('puppeteer');
 
 const generatePdfCutClose = async (html) => {
   try {
-    
-    const browser = await puppeteer.launch({
-      headless: true,
-      defaultViewport:{
-        width: 816,
-        height: 500,
-        deviceScaleFactor: 1,
-        isMobile: true,
-        hasTouch: false,
-        isLandscape: false
-      }
-    });
+      /* 
+        {
+        headless: true,
+        defaultViewport:{
+            width: 816,
+            height: 500,
+            deviceScaleFactor: 1,
+            isMobile: true,
+            hasTouch: false,
+            isLandscape: false
+          }
+        }
+      */
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.emulateMediaType("screen")
+    /* await page.emulateMediaType("screen") */
     await page.setContent(html);
     
     // Generar PDF en formato buffer
