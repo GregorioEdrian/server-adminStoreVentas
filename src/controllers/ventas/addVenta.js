@@ -10,6 +10,7 @@ const {
 
 async function postVenta(req, res){
   const listDetalleVenta = [];
+  const userInfo = req.user
   try {
     const {listDataProduct, idUser, idClient, idTasaDolar, 
       pago_usd, pago_mlc_efectivo, pago_mlc_punto, pago_mlc_digital, idDepartamento} = req.body;
@@ -22,7 +23,7 @@ async function postVenta(req, res){
     if(pago_usd < 0 || pago_mlc_efectivo < 0 || pago_mlc_punto < 0 || pago_mlc_digital < 0){
       return res.status(400).json({error: 'Valores de pago no pueden ser negativos'});
     }
-    const userData = await Usuario.findByPk(idUser);
+    const userData = await Usuario.findByPk(userInfo.id);
     const clientData = await Cliente.findByPk(idClient);
     const departamento = await Departamento.findByPk(idDepartamento);
     if(!userData){
@@ -146,7 +147,7 @@ async function postVenta(req, res){
       pago_mlc_digital: pago_mlc_digital,
       tasa_ref_venta: tasaDolar,
       ventaCliente: idClient,
-      ventaUsuario: idUser,
+      ventaUsuario: userInfo.id,
       ventaDepartamento: idDepartamento,
       vuelto_mlc: totalSent - total_with_tax,
       vuelto_usd : (totalSent - total_with_tax) / tasaDolar,
