@@ -125,7 +125,7 @@ async function postVenta(req, res){
       await restoreStock(listDetalleVenta)
       return res.status(404).json({error: 'El monto enviado a pagar es menor al monto requerido.'})
     }
-    console.log(fecha_venta)
+  
     const dataVenta = {
       num_factura: num_factura,
       num_items: num_items,
