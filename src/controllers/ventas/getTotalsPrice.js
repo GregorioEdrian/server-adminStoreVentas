@@ -58,8 +58,16 @@ async function getTotalsPrice(req, res){
         
       }
     }
-    const totalFact_ref = parseFloat((total / tasaDolar).toFixed(2, 10));
-    const subTotal_ref = parseFloat((subTotal / tasaDolar).toFixed(2, 10));
+    let totalFact_ref = parseFloat((total / tasaDolar).toFixed(2, 10));
+    let subTotal_ref = parseFloat((subTotal / tasaDolar).toFixed(2, 10));
+
+    if(tasaDolar * totalFact_ref < total){
+      totalFact_ref = totalFact_ref + 0.01
+    }
+    if(subTotal_ref * totalFact_ref < subTotal){
+      subTotal_ref = subTotal_ref + 0.01
+    }
+
     const data = {
       subTotal: parseFloat(subTotal.toFixed(2, 10)),
       total : parseFloat(total.toFixed(2, 10)),
