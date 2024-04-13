@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
 
-const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose) => {
+const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose, recibido) => {
   
   const getDateMoment = (date) => {
     const fechaModificada = moment.utc(date).tz('America/Caracas');
@@ -54,6 +54,12 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose) => {
     return allRowsHtml;
   }
 
+  /* const recividoEfectivo = {
+     : 0,
+     : 0,
+     :  0,
+    : 0
+  } */
 
   return ` 
   <!DOCTYPE html>
@@ -89,10 +95,22 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose) => {
 
       <div style="border: 1px solid rgba(0,0,0,0.3); min-width: 733px; margin: 5px 0;"></div>
 
-      <div style="display: flex; justify-content: center; min-width: 733px; margin: 5px 0;">
-        <p>Total vendido en el rango de fecha seleccionado ${(infoCuotClose.total_venta_mlc).toFixed(2)}Bs. 
-        equivalente a ${(infoCuotClose.total_venta_usd).toFixed(2)}</p>        
+      <div style="display: flex; flex-direction: column ;justify-content: center; min-width: 200mm; 
+        margin: 5px 0; width: 100%; gap: 10px; align-items: center;">
+        <p style:"font-size: 12pt;">Desglose correspondiente a los metodos de pago:</p>        
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 90%; 
+        border: 1px solid rgba(0,0,0,0.3); padding: 5px; gap: 10px; border-radius: 5px; align-content: center; justify-items: center;">
+          <p style="padding: 0; margin: 0; font-size: 10pt;">Total Punto de venta: <b>${(recibido.recibido_punto).toFixed(2)}Bs.</b> </p>
+          <p style="padding: 0; margin: 0; font-size: 10pt;">Total pago movil o transferencia: <b>${(recibido.recibido_digital).toFixed(2)}Bs.</b></p>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; width: 90%;
+         gap: 10px; border: 1px solid rgba(0,0,0,0.3); padding: 5px; border-radius: 5px; align-content: center; justify-items: center;">
+          <p style="padding: 0; margin: 0; font-size: 10pt;">Total bolivares efectivo: <b>${(recibido.recibido_mlc).toFixed(2)}Bs</b></p>
+          <p style="padding: 0; margin: 0; font-size: 10pt;">Total $ en efectivo: <b>${(recibido.recibido_ref).toFixed(2)}$</b></p>
+        </div>
+        <p style:"font-size: 12pt;">Total vendido en el rango de fecha seleccionado: <b>${(infoCuotClose.total_venta_mlc).toFixed(2)}Bs. / ${(infoCuotClose.total_venta_usd).toFixed(2)}$</b>.</p> 
       </div>
+      
 
       <div style="border: 1px solid rgba(0,0,0,0.3); min-width: 733px;  margin: 5px 0;"></div>
             

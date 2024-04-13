@@ -20,6 +20,13 @@ async function getCutClose(req, res){
       vuelto_usd: 0,
     }
 
+    const recividoEfectivo = {
+      recibido_ref : 0,
+      recibido_mlc : 0,
+      recibido_punto :  0,
+      recibido_digital: 0
+    }
+
     if(typeof departamento !== 'number' && departamento <= 0){
       return res.status(200).json({error: 'Departamento para el cierre incorrecto'});
     }
@@ -61,8 +68,20 @@ async function getCutClose(req, res){
           infoCuotClose.total_venta_mlc = infoCuotClose.total_venta_mlc + element.total_venta_mlc_conIva
           infoCuotClose.total_venta_usd = infoCuotClose.total_venta_usd + element.total_venta_usd_conIva
           infoCuotClose.pago_mlc_digital = infoCuotClose.pago_mlc_digital + element.pago_mlc_digital
-          const idVenta = element.id;               
-      
+          const idVenta = element.id;
+
+          if(element.pago_usd > 0){
+            const valueUsd = element.pago_usd <= element.total_venta_usd_conIva ? element.pago_usd : element.total_venta_usd_conIva;
+            recividoEfectivo.recibido_ref = recividoEfectivo.recibido_ref + valueUsd
+          }
+          if(element.pago_mlc_efectivo > 0){
+            const valueUsd = element.pago_mlc_efectivo <= element.total_venta_mlc_conIva ? element.pago_mlc_efectivo : element.total_venta_mlc_conIva;
+            recividoEfectivo.recibido_mlc = recividoEfectivo.recibido_mlc + valueUsd
+          } 
+          
+          recividoEfectivo.recibido_digital = recividoEfectivo.recibido_digital + element.pago_mlc_digital;
+          recividoEfectivo.recibido_punto = recividoEfectivo.recibido_punto + element.pago_mlc_punto;
+           
           const DetallesVentas = await DetalleVenta.findAll({
             where: {
               idVenta: idVenta,
@@ -108,7 +127,7 @@ async function getCutClose(req, res){
           DataVentasDetalles.push(arrVentaDetalle)
         }
         
-        const htmlAllData = htmlCutClose(DataVentasDetalles, initDay, endDay, depart.nombre, infoCuotClose)
+        const htmlAllData = htmlCutClose(DataVentasDetalles, initDay, endDay, depart.nombre, infoCuotClose, recividoEfectivo)
         const bs64Pdf = await generatePdfCutClose(htmlAllData);
                 
         res.setHeader('Cache-Control', 'no-store');
