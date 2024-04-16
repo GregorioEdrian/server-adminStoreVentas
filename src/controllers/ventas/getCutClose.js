@@ -48,7 +48,8 @@ async function getCutClose(req, res){
           fecha_venta: {
             [Op.between]: [ init_day, end_day]
           },
-          ventaDepartamento: departamento
+          ventaDepartamento: departamento,
+          status: true
         }
       });
       const lisData = []
