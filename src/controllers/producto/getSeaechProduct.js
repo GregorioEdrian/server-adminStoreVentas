@@ -4,47 +4,87 @@ const { Op } = require('sequelize');
 async function getSeaechProduct(req, res){
   try {
 
-    const  { wordSearch } = req.params;
+    const  { wordSearch, id_departamento } = req.params;
 
     if(!wordSearch){
       return res.status(404).json({error: 'Debe enviar un valor a buscar'})
     };
 
-    const productos = await Producto.findAll({
-      where:{
-        [Op.or]: [
+    let productos;
+    if(id_departamento > 0){
+      productos = await Producto.findAll({
+        where:{
+          departamento: id_departamento,
+          [Op.or]: [
+            {
+              codigo: {
+                [Op.like]: `%${wordSearch}%`
+              }
+            },
+            {
+              nombre: {
+                [Op.like]: `%${wordSearch}%`
+              }
+            },
+            
+          ]
+        },
+        attributes: {
+          exclude: ['presentacion', 'lote', 'p_com_bulto', 'p_venta_bulto', 'p_venta_unidad', 'departamento'],
+        },
+        include:[
           {
-            codigo: {
-              [Op.like]: `%${wordSearch}%`
-            }
+            model: Presentacion,
+            as: "ProductoPresentacion"
           },
           {
-            nombre: {
-              [Op.like]: `%${wordSearch}%`
-            }
+            model: Departamento,
+            as: "ProductoDepartamento"
           },
-          
-        ]
-      },
-      attributes: {
-        exclude: ['presentacion', 'lote', 'p_com_bulto', 'p_venta_bulto', 'p_venta_unidad', 'departamento'],
-      },
-      include:[
-        {
-          model: Presentacion,
-          as: "ProductoPresentacion"
+          {
+            model: Categoria, 
+            through: {attributes: []}
+          }
+        ],
+        option: { raw: true }
+      });
+    }else{
+      productos = await Producto.findAll({
+        where:{
+          [Op.or]: [
+            {
+              codigo: {
+                [Op.like]: `%${wordSearch}%`
+              }
+            },
+            {
+              nombre: {
+                [Op.like]: `%${wordSearch}%`
+              }
+            },
+            
+          ]
         },
-        {
-          model: Departamento,
-          as: "ProductoDepartamento"
+        attributes: {
+          exclude: ['presentacion', 'lote', 'p_com_bulto', 'p_venta_bulto', 'p_venta_unidad', 'departamento'],
         },
-        {
-          model: Categoria, 
-          through: {attributes: []}
-        }
-      ],
-      option: { raw: true }
-    });
+        include:[
+          {
+            model: Presentacion,
+            as: "ProductoPresentacion"
+          },
+          {
+            model: Departamento,
+            as: "ProductoDepartamento"
+          },
+          {
+            model: Categoria, 
+            through: {attributes: []}
+          }
+        ],
+        option: { raw: true }
+      });
+    }
 
     const productosLista = [];
     productos.forEach(element => {

@@ -40,7 +40,7 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose, recibi
         <td colspan="2" style="border: 1px #000000 solid; padding: 3px;">Cambio. ${(venta.vuelto_mlc).toFixed(2)}BS. / ${(venta.vuelto_usd).toFixed(2)}$.</td>
       </tr>
     `
-    htmlString = htmlString + totalsHTML
+    htmlString = htmlString + totalsHTML;
     return htmlString
   }
 

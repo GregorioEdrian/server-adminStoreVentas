@@ -16,8 +16,8 @@ productRouter.put('/addSubProduct', addSubProduct)
 productRouter.post('/add-many-products', postManyProduct)
 productRouter.post('/', addProducto);
 productRouter.post('/get-pdf-tags', createPdfTags)
-productRouter.get('/codigo-nombre-ptv/wordSearch/:wordSearch', getSeaechProduct);
-productRouter.get('/', getAllProductos);
+productRouter.get('/codigo-nombre-ptv/wordSearch/:wordSearch/id_departamento/:id_departamento', getSeaechProduct);
+productRouter.get('/id_departamento/:id_departamento', getAllProductos);
 productRouter.put('/', updateProduct);
 
 
