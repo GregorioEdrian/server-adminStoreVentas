@@ -12,6 +12,12 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose, recibi
     const venta = arrDetail[0].venta;
     const nrows = arrDetail.length;
 
+    let numFactura =  venta.num_factura.toString();
+        
+    for(let j=0; j <= (6 - numFactura.length); j++){
+      numFactura = '0' + numFactura;
+    }
+
     const fechaUTC = venta.fecha_venta;
     const fechaModificada = moment.utc(fechaUTC).tz('America/Caracas');
     const fechaFormateada = fechaModificada.format('YYYY-MM-DD hh:mm:ss');
@@ -35,8 +41,9 @@ const htmlCutClose = (data, initDay, endDay, departamento, infoCuotClose, recibi
     }
     const totalsHTML = `
       <tr style="background: #dcdcdc; font-size: 10px;">
+        <td style="border: 1px #000000 solid; padding: 3px; width: '92px';"># Fact: ${numFactura}</td>
         <td colspan="2" style="border: 1px #000000 solid; padding: 3px;">T. Venta: ${(venta.total_mlc).toFixed(2)}BS. / ${(venta.total_usd).toFixed(2)}$.</td>
-        <td colspan="3" style="border: 1px #000000 solid; padding: 3px;">Pg. Efect. ${(venta.pago_mlc_efectivo).toFixed(2)}Bs. / ${(venta.pago_usd).toFixed(2)}$. - Punto DV. ${(venta.pago_mlc_punto).toFixed(2)} - P. Movil. ${(venta.pago_mlc_digital).toFixed(2)}</td>
+        <td colspan="2" style="border: 1px #000000 solid; padding: 3px;">Pg. Efect. ${(venta.pago_mlc_efectivo).toFixed(2)}Bs. / ${(venta.pago_usd).toFixed(2)}$. - Punto DV. ${(venta.pago_mlc_punto).toFixed(2)} - P. Movil. ${(venta.pago_mlc_digital).toFixed(2)}</td>
         <td colspan="2" style="border: 1px #000000 solid; padding: 3px;">Cambio. ${(venta.vuelto_mlc).toFixed(2)}BS. / ${(venta.vuelto_usd).toFixed(2)}$.</td>
       </tr>
     `
