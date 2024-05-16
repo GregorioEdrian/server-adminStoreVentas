@@ -3,7 +3,7 @@ const { Producto } = require('../db')
 async function changeAllPriceToDollar(rate){
   let tasa ;
   if(!rate){
-    tasa = 380
+    tasa = 38
   }else{
     tasa = rate
   }
