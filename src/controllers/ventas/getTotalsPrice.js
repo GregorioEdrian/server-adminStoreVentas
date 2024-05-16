@@ -1,8 +1,9 @@
 const { Producto, TazaDolar } = require('../../db');
-const converToNDecimals = require('../../utils/covertToNDecimals');
+const getConfigCoinIsMlcOrRef = require('../../utils/getConfigCoinIsMlcOrRef')
 
 async function getTotalsPrice(req, res){
   try {
+    const configCoin = getConfigCoinIsMlcOrRef()
     const { idRate, dataProduct } = req.body;
     if(!idRate || dataProduct.length === 0){
       return res.status(400).json({error: 'Faltan datos para la consulta'})
@@ -35,6 +36,8 @@ async function getTotalsPrice(req, res){
 
     let subTotal = 0;
     let total = 0;
+    //=====================================
+
     for(const elem of dataProduct){
       const prod = await Producto.findOne({where: {id: elem.id}});
       if(!prod){
@@ -58,23 +61,35 @@ async function getTotalsPrice(req, res){
         
       }
     }
-    let totalFact_ref = parseFloat((total / tasaDolar).toFixed(2, 10));
-    let subTotal_ref = parseFloat((subTotal / tasaDolar).toFixed(2, 10));
+    
+    if(!configCoin || configCoin === 'mlc'){
+      let totalFact_ref = parseFloat((total / tasaDolar).toFixed(2, 10));
+      let subTotal_ref = parseFloat((subTotal / tasaDolar).toFixed(2, 10));
 
-    /* if(tasaDolar * totalFact_ref < total){
-      totalFact_ref = totalFact_ref + 0.01
-    }
-    if(subTotal_ref * totalFact_ref < subTotal){
-      subTotal_ref = subTotal_ref + 0.01
-    } */
+      const data = {
+        subTotal: parseFloat(subTotal.toFixed(2, 10)),
+        total : parseFloat(total.toFixed(2, 10)),
+        subTotal_ref : subTotal_ref,
+        totalFact_ref: totalFact_ref
+      }
+      return res.status(200).json(data);
 
-    const data = {
-      subTotal: parseFloat(subTotal.toFixed(2, 10)),
-      total : parseFloat(total.toFixed(2, 10)),
-      subTotal_ref : subTotal_ref,
-      totalFact_ref: totalFact_ref
+    }else if(configCoin === 'ref'){
+      let totalFact_ref = parseFloat((total).toFixed(2, 10));
+      let subTotal_ref = parseFloat((subTotal).toFixed(2, 10));
+      const dataSubTotal = subTotal * tasaDolar
+      const dataTotal = total * tasaDolar
+
+      const data = {
+        subTotal: parseFloat(dataSubTotal.toFixed(2, 10)),
+        total : parseFloat(dataTotal.toFixed(2, 10)),
+        subTotal_ref : subTotal_ref,
+        totalFact_ref: totalFact_ref
+      }
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
+
+    
 
   } catch (error) {
     return res.status(400).json({error: error})

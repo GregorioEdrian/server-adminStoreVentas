@@ -58,10 +58,10 @@ async function getSatactProducts(req, res){
         }
         
         totalsProducts.totalProductsInStock = totalsProducts.totalProductsInStock + totalStockIn
-        totalsProducts.totalEstimatedVenta = totalsProducts.totalEstimatedVenta + totalStimateSellIn
+        totalsProducts.totalEstimatedVenta = parseFloat((totalsProducts.totalEstimatedVenta + totalStimateSellIn).toFixed(2))
         totalsProducts.totalProductsIn[departNombre] = n 
         totalsProducts.totalStockIn[departNombre] = totalStockIn
-        totalsProducts.totalStimateSellIn[departNombre] = totalStimateSellIn
+        totalsProducts.totalStimateSellIn[departNombre] = parseFloat((totalStimateSellIn).toFixed(2))
       } 
 
       const dataSells = await getAllVentasInLastThirtyDay()

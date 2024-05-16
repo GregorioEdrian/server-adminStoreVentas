@@ -64,8 +64,8 @@ async function getAllVentasInLastThirtyDay(){
             totalSellsBs = totalSellsBs + sells.total_venta_mlc_conIva,
             totalSellsRef = totalSellsRef + sells.total_venta_usd_conIva
           }
-          dataVent[nameDepart + 'Bs'] = totalSellsBs
-          dataVent[nameDepart + 'Ref'] = totalSellsRef
+          dataVent[nameDepart + 'Bs'] = parseFloat((totalSellsBs).toFixed(2))
+          dataVent[nameDepart + 'Ref'] = parseFloat((totalSellsRef).toFixed(2))
         }   
         dataSells.push(dataVent)
       }

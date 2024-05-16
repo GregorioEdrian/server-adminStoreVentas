@@ -3,6 +3,7 @@ const { Venta, Usuario, Cliente, DetalleVenta, TazaDolar, Producto, Departamento
 const getDate = require('../../utils/getDate');
 require('dotenv').config();
 const restoreStock = require('../../utils/restoreStock.js');
+const getConfigCoinIsMlcOrRef = require('../../utils/getConfigCoinIsMlcOrRef')
 
 const {
   IGFT
@@ -12,6 +13,7 @@ async function postVenta(req, res){
   const listDetalleVenta = [];
   const userInfo = req.user
   try {
+    const configCoin = getConfigCoinIsMlcOrRef()
     const {listDataProduct, idUser, idClient, idTasaDolar, 
       pago_usd, pago_mlc_efectivo, pago_mlc_punto, pago_mlc_digital, idDepartamento} = req.body;
 
@@ -81,6 +83,8 @@ async function postVenta(req, res){
       const detalleVenta = await addDetalleVenta(element.id, null, idTasaDolar, element.numItems, element.cant, listDetalleVenta);
       listDetalleVenta.push(detalleVenta);
     }
+
+    ///========================
     
     //sales totals calculations.        
     for(const element of listDetalleVenta){
