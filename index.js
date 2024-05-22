@@ -31,7 +31,7 @@ app.listen(PORT_LISTEN, ()=>{
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 const { DB_fORCE, DB_HOST } = process.env;
-const dbForce = DB_fORCE == '0' ? false : true;
+const dbForce = DB_fORCE === false;
 const defaultDniType = require('./src/controllers/dniType/defaultTipoDni.js');
 const clientDefaultSeeder = require('./src/utils/clientDefaultSeeder.js');
 //const InitializateDataModels = require('./src/middleware/index.js');
