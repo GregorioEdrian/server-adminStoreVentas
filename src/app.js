@@ -33,7 +33,7 @@ server.use(cors({
   origin: ['http://localhost:3000', 'https://admin-ventas-mukafe.netlify.app'],
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept',  'Authorization']
 }));
 
 //server.use('/', routes);
