@@ -20,10 +20,10 @@ async function postRefreshToken(req, res){
         return res.status(401).json({error: "Unauthorized"});
       }
     }else{
-      res.status(401).json({error: "Unauthorized"});
+      return res.status(401).json({error: "Unauthorized"});
     }
   } catch (error) {
-    res.status(401).json({error: error.message});
+    return res.status(401).json({error: error.message});
   }
 }
 

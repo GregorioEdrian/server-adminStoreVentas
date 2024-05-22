@@ -69,10 +69,10 @@ async function getSatactProducts(req, res){
       return res.status(200).json({totalsProducts: totalsProducts, dataSells: dataSells})
     }
     if(!allProducts.length){
-      res.status(202).json({message: 'No hay productos para mostrar estadisticas'})
+      return res.status(202).json({message: 'No hay productos para mostrar estadisticas'})
     }
     if(!allDepartamento.length){
-      res.status(202).json({message: 'No hay departamentos registrados con productos'})
+      return res.status(202).json({message: 'No hay departamentos registrados con productos'})
     }
     return res.status(400).json({message: 'Algo ha salido mal'})
 
